@@ -346,7 +346,7 @@ def vdf_projection(
 
     q_e = constants.elementary_charge
 
-    speed_table = np.sqrt((energy_edges - sc_pot) * q_e * 2 / mass)
+    speed_table = np.sqrt((energy_edges - sc_pot) * q_e * 2 / mass, dtype=np.csingle)
     speed_table = np.real(speed_table * 1e-3)  # km/s
 
     r_en = speed_table
