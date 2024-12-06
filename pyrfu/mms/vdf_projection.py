@@ -92,6 +92,7 @@ def _init(vdf: Dataset, tint: list):
             10 ** (np.log10(energy0[-1]) + diff_energ),
         ],
     )
+
     energy1_edges = np.hstack(
         [
             10 ** (np.log10(energy1) - diff_energ),
@@ -109,10 +110,10 @@ def _init(vdf: Dataset, tint: list):
         step_table = step_table[t_id]
         azimuthal = azimuthal.data[t_id, ...]
 
-        if step_table.data:
+        if step_table:
             energy_edges = energy1_edges
         else:
-            energy_edges = energy1_edges
+            energy_edges = energy0_edges
 
     elif tint is not None and len(tint) == 2:
         dist = time_clip(vdf.data, tint)
