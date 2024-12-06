@@ -164,7 +164,7 @@ def vdf_frame_transformation(vdf, v_gse):
 
     """
 
-    v_gse = resample(v_gse, vdf.time)
+    v_gse = resample.resample(v_gse, vdf.time)
     theta = vdf.theta.data
 
     out_data = np.zeros_like(vdf.data.data)
@@ -178,7 +178,7 @@ def vdf_frame_transformation(vdf, v_gse):
         v_mat = np.sqrt(
             2 * en_mat * constants.electron_volt / constants.proton_mass,
         )
-        v_xyz = sph2cart(np.deg2rad(phi_mat), np.deg2rad(theta_mat), v_mat)
+        v_xyz = sph2cart.sph2cart(np.deg2rad(phi_mat), np.deg2rad(theta_mat), v_mat)
 
         grid_cart = np.stack(
             [
