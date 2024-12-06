@@ -30,6 +30,8 @@ def calculate_epsilon(
     n_s: DataArray,
     sc_pot: DataArray,
     en_channels: Optional[list[int]] = None,
+    mask_zero_count_bins: Optional[bool] = False,
+    return_integrand: Optional[bool] = False,
 ) -> DataArray:
     r"""Calculate epsilon parameter using model distribution.
 
@@ -46,6 +48,11 @@ def calculate_epsilon(
     en_channels : list, Optional
         Set energy channels to integrate over [min max]; min and max between
         must be between 1 and 32.
+    mask_zero_count_bins : bool, Optional
+        Mask out any model VDF bins where the measured VDF has zero phase 
+        space density. Default: False
+    return_integrand: bool, Optional
+        Return the integrand of epsilon as a DataSet for plotting. Default: False
 
     Returns
     -------
@@ -72,6 +79,11 @@ def calculate_epsilon(
 
     vdf_data = vdf.data.data.copy() * 1e12
     model_vdf_data = model_vdf.data.data.copy() * 1e-18
+
+    # mask off zero count bins
+    if mask_zero_count_bins:
+        vdf_data[vdf_data==0.0] = np.nan
+        model_vdf_data[vdf_data==0.0] = np.nan
 
     energy = vdf.energy.data.copy()
     phi = vdf.phi.data.copy()
@@ -166,4 +178,7 @@ def calculate_epsilon(
 
     epsilon /= 1e6 * (n_s.data * 2)
 
-    return ts_scalar(vdf.time.data, epsilon)
+    if return_integrand:
+        return ts_scalar(vdf.time.data, epsilon), np.einsum('i,i...->i...', np.reciprocal(1e6 * (n_s.data * 2)), vdf_diff[:, int_energies, ...] * v_mat**2 * m_mat * delta_v_mat)
+    else:
+        return ts_scalar(vdf.time.data, epsilon)
