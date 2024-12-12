@@ -165,7 +165,7 @@ def _init(vdf: Dataset, tint: list):
                 energy_edges = energy0_edges
 
         dist = dist.data
-        azimuthal = azimuthal.data
+        # azimuthal = azimuthal.data
     else:
         raise ValueError("Invalid time interval")
 
