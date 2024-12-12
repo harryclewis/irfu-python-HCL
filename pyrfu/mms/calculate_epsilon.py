@@ -82,8 +82,7 @@ def calculate_epsilon(
 
     # mask off zero count bins
     if mask_zero_count_bins:
-        vdf_data[vdf_data==0.0] = np.nan
-        model_vdf_data[vdf_data==0.0] = np.nan
+        model_vdf_data[vdf_data==0.0] = 0.0
 
     energy = vdf.energy.data.copy()
     phi = vdf.phi.data.copy()
